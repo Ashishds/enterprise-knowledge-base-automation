@@ -44,11 +44,12 @@ def parse_env_file(env_path: Path) -> dict[str, str]:
 def seed_secrets(env_name: str, env_file_path: str) -> None:
     """Seed secrets from env file into AWS Secrets Manager."""
     secrets = parse_env_file(Path(env_file_path))
-    client = boto3.client(
-        "secretsmanager", region_name=os.getenv("AWS_DEFAULT_REGION", "us-east-1")
-    )
+    raw_region = os.getenv("AWS_DEFAULT_REGION", "us-east-1") or "us-east-1"
+    region = raw_region.strip().replace("\r", "").replace("\n", "")
+    client = boto3.client("secretsmanager", region_name=region)
 
-    print(f"[*] Seeding {len(secrets)} secrets for environment '{env_name}'...")
+    print(f"[*] Seeding {len(secrets)} secrets for environment '{env_name}' in region '{region}'...")
+
 
     for key, value in secrets.items():
         secret_id = f"ekba/{env_name}/{key.lower()}"

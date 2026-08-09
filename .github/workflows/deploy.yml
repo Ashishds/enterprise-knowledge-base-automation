@@ -45,11 +45,13 @@ jobs:
 
       - name: Seed Secrets to AWS Secrets Manager
         env:
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          INPUT_REGION: ${{ secrets.AWS_REGION }}
           EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
           QDRANT_URL: ${{ secrets.QDRANT_URL }}
         run: |
+          CLEAN_REGION=$(echo "${INPUT_REGION:-us-east-1}" | tr -d '\r\n\t ' )
+          export AWS_DEFAULT_REGION="${CLEAN_REGION:-us-east-1}"
           cat <<EOF > backend/.env.prod
           EURI_API_KEY=${EURI_API_KEY}
           QDRANT_API_KEY=${QDRANT_API_KEY}
@@ -58,6 +60,7 @@ jobs:
           EOF
           python scripts/seed_secrets.py prod backend/.env.prod
           rm -f backend/.env.prod
+
 
       - name: Run Test Suite & Security Gates
         env:
