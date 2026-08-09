@@ -1,0 +1,45 @@
+name: EKBA CI
+
+on:
+  push:
+    branches: [ main, feat/*, fix/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install ruff black mypy pytest pytest-cov
+
+      - name: Lint with ruff & black
+        run: |
+          ruff check backend/app
+          black --check backend/app
+
+      - name: Type check with mypy
+        run: |
+          mypy backend/app
+
+      - name: Run pytest suite
+        run: |
+          pytest backend/tests -m "unit or security or agent"
+
+      - name: Run evaluation benchmark regression gate
+        run: |
+          python backend/evals/run_eval.py
+
+      - name: Verify no terraform destroy in workflows
+        run: |
+          ! grep -rn "terraform destroy" .github/workflows/

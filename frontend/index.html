@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1116" />
+    <title>EKBA — Enterprise Knowledge-Base Automation</title>
+    <meta
+      name="description"
+      content="Agentic RAG for the enterprise knowledge base. Ask in any language, get answers grounded in cited documents."
+    />
+    <script>
+      // Pre-paint theme script — the one deliberate inline script (DESIGN-SYSTEM.md §3).
+      // In production this is allowed via a CSP hash, never 'unsafe-inline'.
+      (function () {
+        try {
+          var stored = localStorage.getItem("ekba-theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = stored ? stored === "dark" : prefersDark;
+          if (dark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

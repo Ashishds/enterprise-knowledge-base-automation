@@ -1,0 +1,139 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens copied verbatim from docs/DESIGN-SYSTEM.md §2. Do not "fix" the
+   brand inversion in .dark — it's deliberate (a #0A66C2 button fails
+   contrast on a 4%-lightness ground). */
+:root {
+  --background: 215 20% 97%;
+  --foreground: 220 14% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 14% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 14% 11%;
+  --secondary: 215 18% 93%;
+  --secondary-foreground: 220 14% 11%;
+  --muted: 215 18% 93%;
+  --muted-foreground: 220 6% 42%;
+  --accent: 215 18% 93%;
+  --accent-foreground: 220 14% 11%;
+  --destructive: 0 72% 44%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 215 16% 85%;
+  --input: 215 16% 80%;
+  --radius: 0.5rem;
+
+  --brand: 10 102 194;
+  --brand-foreground: 255 255 255;
+  --success: 5 150 105;
+  --warning: 217 119 6;
+  --info: 124 58 237;
+  --danger: 220 38 38;
+  --neutral: 100 116 139;
+
+  --shadow-sm: 0 1px 2px 0 rgb(20 20 30 / 0.04);
+  --shadow: 0 1px 3px 0 rgb(20 20 30 / 0.06), 0 1px 2px -1px rgb(20 20 30 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(20 20 30 / 0.08);
+  --shadow-lg: 0 16px 40px -12px rgb(20 20 30 / 0.14);
+}
+
+.dark {
+  --background: 200 28% 4%;
+  --foreground: 205 22% 92%;
+  --card: 206 26% 9%;
+  --card-foreground: 205 22% 92%;
+  --popover: 206 26% 9%;
+  --popover-foreground: 205 22% 92%;
+  --secondary: 206 22% 15%;
+  --secondary-foreground: 205 22% 92%;
+  --muted: 206 20% 14%;
+  --muted-foreground: 208 16% 63%;
+  --accent: 206 22% 16%;
+  --accent-foreground: 205 22% 92%;
+  --destructive: 0 62% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 205 18% 19%;
+  --input: 205 18% 23%;
+
+  --brand: 255 255 252 !important;
+  --brand-foreground: 12 18 24 !important;
+
+  --success: 52 211 153;
+  --warning: 251 191 36;
+  --info: 167 139 250;
+  --danger: 248 113 113;
+  --neutral: 148 163 184;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.6), 0 1px 2px -1px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 16px -2px rgb(0 0 0 / 0.65);
+  --shadow-lg: 0 18px 44px -12px rgb(0 0 0 / 0.75);
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Glassmorphism surface — still built entirely from tokens (frontend.md §1a):
+   card colour + border + shadow, with translucency and blur layered on top. */
+.glass-panel {
+  background-color: hsl(var(--card) / 0.62);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid hsl(var(--border) / 0.6);
+  box-shadow: var(--shadow-lg);
+}
+
+.brand-glow {
+  background: radial-gradient(60% 60% at 50% 0%, rgb(var(--brand) / 0.22), transparent 70%);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, hsl(var(--foreground)), rgb(var(--brand)), hsl(var(--foreground)));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mono-tag {
+  font-family: "Geist Mono Variable", ui-monospace, monospace;
+  letter-spacing: 0.01em;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 9999px;
+}
