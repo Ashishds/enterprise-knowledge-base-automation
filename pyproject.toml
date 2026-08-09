@@ -52,7 +52,7 @@ warn_unused_ignores = false
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-pythonpath = ["backend"]
+pythonpath = ["backend", "."]
 testpaths = ["backend/tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]

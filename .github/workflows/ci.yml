@@ -21,7 +21,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          pip install ruff black mypy pytest pytest-cov
+          pip install boto3 ruff black mypy pytest pytest-cov httpx fastapi uvicorn pydantic pydantic-settings
 
       - name: Lint with ruff & black
         run: |
@@ -33,8 +33,11 @@ jobs:
           mypy backend/app
 
       - name: Run pytest suite
+        env:
+          PYTHONPATH: .
         run: |
-          pytest backend/tests -m "unit or security or agent"
+          pytest backend/tests
+
 
       - name: Run evaluation benchmark regression gate
         env:
