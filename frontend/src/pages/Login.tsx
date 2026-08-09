@@ -19,6 +19,11 @@ export function Login() {
     navigate("/workbench");
   };
 
+  const continueAsGuest = () => {
+    signIn({ name: "Guest User", email: "guest@example.com", department: "General" });
+    navigate("/workbench");
+  };
+
   return (
     <div className="brand-glow flex min-h-dvh items-center justify-center px-6">
       <div className="glass-panel w-full max-w-sm rounded-xl p-8">
@@ -26,13 +31,31 @@ export function Login() {
           <span className="flex h-11 w-11 items-center justify-center rounded bg-brand text-brand-foreground">
             <ShieldCheck className="h-5 w-5" />
           </span>
-          <h1 className="mt-4 text-lg font-semibold">Sign in to EKBA</h1>
+          <h1 className="mt-4 text-lg font-semibold">EKBA Workbench</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Local demo session — not real authentication. Production EKBA signs in via AWS Cognito.
+            Sign-in is optional. Click below to continue directly as guest or customize your session.
           </p>
         </div>
 
-        <form onSubmit={submit} className="mt-6 space-y-4 text-left">
+        <div className="mt-6 space-y-3">
+          <button
+            type="button"
+            onClick={continueAsGuest}
+            className="group flex w-full items-center justify-center gap-2 rounded bg-brand px-4 py-2.5 text-sm font-medium text-brand-foreground shadow-md transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          >
+            Continue as Guest (Skip Sign-in)
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </button>
+        </div>
+
+        <div className="relative my-6 text-center text-xs text-muted-foreground">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border" />
+          </div>
+          <span className="relative bg-card px-2 text-muted-foreground">Or customize department profile</span>
+        </div>
+
+        <form onSubmit={submit} className="space-y-4 text-left">
           <div>
             <label htmlFor="name" className="text-xs font-medium text-muted-foreground">
               Name
@@ -41,7 +64,7 @@ export function Login() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Jordan Lee"
+              placeholder="Jordan Lee (Optional)"
               className="mt-1 w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
             />
           </div>
@@ -55,7 +78,7 @@ export function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="jordan@company.com"
+              placeholder="jordan@company.com (Optional)"
               className="mt-1 w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
             />
           </div>
@@ -83,10 +106,9 @@ export function Login() {
 
           <button
             type="submit"
-            className="group flex w-full items-center justify-center gap-2 rounded bg-brand px-4 py-2.5 text-sm font-medium text-brand-foreground shadow-md transition-transform hover:scale-[1.01] active:scale-[0.99]"
+            className="flex w-full items-center justify-center gap-2 rounded border border-input bg-secondary/50 px-4 py-2 text-sm font-medium hover:bg-secondary"
           >
-            Enter workbench
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            Enter with custom profile
           </button>
         </form>
       </div>

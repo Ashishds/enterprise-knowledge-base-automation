@@ -33,7 +33,7 @@ export function LandingNav() {
             to="/login"
             className="inline-flex h-9 items-center rounded bg-brand px-4 text-sm font-medium text-brand-foreground shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
-            Sign in
+            Launch Workbench
           </Link>
         </div>
       </div>
