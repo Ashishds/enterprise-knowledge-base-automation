@@ -30,7 +30,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          pip install boto3 ruff black mypy pytest pytest-cov httpx fastapi uvicorn pydantic pydantic-settings
+          pip install boto3 ruff black mypy pytest pytest-cov pytest-asyncio httpx fastapi uvicorn pydantic pydantic-settings
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
@@ -61,14 +61,15 @@ jobs:
           python scripts/seed_secrets.py prod backend/.env.prod
           rm -f backend/.env.prod
 
-
       - name: Run Test Suite & Security Gates
         env:
+          PYTHONPATH: .
           EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
           QDRANT_URL: ${{ secrets.QDRANT_URL }}
         run: |
           pytest backend/tests
+
 
       - name: Run Evaluation Benchmark Regression Gate
         env:
