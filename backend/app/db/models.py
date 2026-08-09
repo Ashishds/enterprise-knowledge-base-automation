@@ -63,7 +63,7 @@ class User(Base):
     )
     email = Column(String(255), nullable=False)
     role = Column(String(32), nullable=False, default="user")
-    departments = Column(ARRAY(String), nullable=False, default=list)
+    departments: Column[list[str]] = Column(ARRAY(String), nullable=False, default=list)
     status = Column(String(32), nullable=False, default="active")
     last_login_at = Column(DateTime(timezone=True), nullable=True)
 
