@@ -22,8 +22,10 @@ export function DocumentUpload({ onUploaded }: { onUploaded: () => void }) {
       onUploaded();
     } catch (err) {
       setStatus("failed");
-      setMessage(err instanceof ApiError ? err.message : "Upload failed.");
+      const errDetail = err instanceof ApiError ? err.message : (err instanceof Error ? err.message : "Upload failed.");
+      setMessage(errDetail.includes("fetch") ? "Could not connect to backend server. Is FastAPI server running on port 8000?" : errDetail);
     }
+
   };
 
   return (
