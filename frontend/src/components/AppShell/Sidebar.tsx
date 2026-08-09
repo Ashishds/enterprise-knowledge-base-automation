@@ -2,15 +2,15 @@ import { BarChart3, FileText, MessageSquare, Settings, ShieldCheck, Users, X } f
 import { cn } from "@/lib/utils";
 import type { WorkbenchView } from "@/pages/Workbench";
 
-const NAV_GROUPS: { label: string; items: { icon: typeof MessageSquare; label: string; view?: WorkbenchView; disabled?: boolean }[] }[] = [
+const NAV_GROUPS: { label: string; items: { icon: typeof MessageSquare; label: string; view: WorkbenchView }[] }[] = [
   { label: "Ask", items: [{ icon: MessageSquare, label: "Chat", view: "chat" }] },
   { label: "Knowledge", items: [{ icon: FileText, label: "Documents", view: "documents" }] },
-  { label: "Insight", items: [{ icon: BarChart3, label: "Usage & cost", disabled: true }] },
+  { label: "Insight", items: [{ icon: BarChart3, label: "Usage & cost", view: "usage" }] },
   {
     label: "Admin",
     items: [
-      { icon: Users, label: "Users & grants", disabled: true },
-      { icon: Settings, label: "Settings", disabled: true },
+      { icon: Users, label: "Users & grants", view: "users" },
+      { icon: Settings, label: "Settings", view: "settings" },
     ],
   },
 ];

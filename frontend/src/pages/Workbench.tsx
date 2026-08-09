@@ -9,8 +9,11 @@ import { AppFooter } from "@/components/AppShell/AppFooter";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { DocumentUpload } from "@/components/documents/DocumentUpload";
 import { DocumentList } from "@/components/documents/DocumentList";
+import { UsageView } from "@/components/insight/UsageView";
+import { UsersView } from "@/components/admin/UsersView";
+import { SettingsView } from "@/components/admin/SettingsView";
 
-export type WorkbenchView = "chat" | "documents";
+export type WorkbenchView = "chat" | "documents" | "usage" | "users" | "settings";
 
 export function Workbench() {
   const session = useAppStore((s) => s.session);
@@ -43,9 +46,8 @@ export function Workbench() {
       <div className="flex min-h-0 flex-1">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} view={view} onSelectView={setView} />
 
-        {view === "chat" ? (
-          <ChatWindow />
-        ) : (
+        {view === "chat" && <ChatWindow />}
+        {view === "documents" && (
           <div className="scrollbar-thin min-h-0 flex-1 overflow-y-auto p-6">
             <div className="mx-auto max-w-2xl">
               <div className="mb-6">
@@ -62,6 +64,9 @@ export function Workbench() {
             </div>
           </div>
         )}
+        {view === "usage" && <UsageView />}
+        {view === "users" && <UsersView />}
+        {view === "settings" && <SettingsView />}
       </div>
       <AppFooter />
     </div>
