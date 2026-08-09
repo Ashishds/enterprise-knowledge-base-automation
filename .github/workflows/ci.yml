@@ -47,6 +47,7 @@ jobs:
         run: |
           python backend/evals/run_eval.py
 
-      - name: Verify no terraform destroy in workflows
+      - name: Verify Non-Destructive Policy
         run: |
-          ! grep -rn "terraform destroy" .github/workflows/
+          ! grep -rn "terraform [d]estroy" .github/workflows/
+

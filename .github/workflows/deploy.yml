@@ -86,5 +86,6 @@ jobs:
 
       - name: Verify Non-Destructive Policy
         run: |
-          ! grep -rn "terraform destroy" .github/workflows/
+          ! grep -rn "terraform [d]estroy" .github/workflows/
+
 
