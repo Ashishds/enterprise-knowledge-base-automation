@@ -35,3 +35,11 @@ frontend:
 
 eval:
 	python backend/evals/run_eval.py
+
+seed-secrets:
+	python scripts/seed_secrets.py dev backend/.env
+
+docker-build:
+	docker build -t ekba-backend:latest ./backend
+	docker build -t ekba-frontend:latest ./frontend
+

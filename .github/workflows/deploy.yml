@@ -17,11 +17,70 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
 
+      - name: Verify AWS Identity & Connectivity
+        run: |
+          aws sts get-caller-identity
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Verify AWS Identity & Services
+      - name: Install Backend Dependencies
         run: |
-          aws sts get-caller-identity
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install boto3 ruff black mypy pytest pytest-cov httpx fastapi uvicorn pydantic pydantic-settings
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Frontend Application
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+      - name: Seed Secrets to AWS Secrets Manager
+        env:
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+          EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+        run: |
+          cat <<EOF > backend/.env.prod
+          EURI_API_KEY=${EURI_API_KEY}
+          QDRANT_API_KEY=${QDRANT_API_KEY}
+          QDRANT_URL=${QDRANT_URL}
+          AWS_REGION=${AWS_DEFAULT_REGION}
+          EOF
+          python scripts/seed_secrets.py prod backend/.env.prod
+          rm -f backend/.env.prod
+
+      - name: Run Test Suite & Security Gates
+        env:
+          EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+        run: |
+          pytest backend/tests
+
+      - name: Run Evaluation Benchmark Regression Gate
+        env:
+          EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+        run: |
+          python backend/evals/run_eval.py
+
+      - name: Build Docker Container Images
+        run: |
+          docker build -t ekba-backend:latest ./backend
+          docker build -t ekba-frontend:latest ./frontend
+
+      - name: Verify Non-Destructive Policy
+        run: |
+          ! grep -rn "terraform destroy" .github/workflows/
+
