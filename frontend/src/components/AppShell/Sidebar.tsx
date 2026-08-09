@@ -61,19 +61,15 @@ export function Sidebar({
                     <button
                       key={item.label}
                       type="button"
-                      disabled={item.disabled}
                       onClick={() => {
-                        if (item.view) {
-                          onSelectView(item.view);
-                          onClose();
-                        }
+                        onSelectView(item.view);
+                        onClose();
                       }}
                       className={cn(
                         "flex w-full items-center gap-2.5 rounded px-3 py-2 text-sm transition-colors",
                         active
                           ? "border-l-2 border-brand bg-accent font-medium text-accent-foreground"
-                          : "border-l-2 border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                        item.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
+                          : "border-l-2 border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                       )}
                     >
                       <item.icon className="h-4 w-4" />
