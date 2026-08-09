@@ -37,6 +37,10 @@ jobs:
           pytest backend/tests -m "unit or security or agent"
 
       - name: Run evaluation benchmark regression gate
+        env:
+          EURI_API_KEY: ${{ secrets.EURI_API_KEY }}
+          QDRANT_URL: ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
         run: |
           python backend/evals/run_eval.py
 
