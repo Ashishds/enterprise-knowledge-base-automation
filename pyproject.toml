@@ -66,3 +66,7 @@ markers = [
     "e2e: End-to-end stack tests",
     "asyncio: Asyncio tests",
 ]
+
+[tool.vercel]
+entrypoint = "backend/app/main.py"
+
